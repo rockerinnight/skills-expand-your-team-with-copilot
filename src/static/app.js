@@ -305,7 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function buildShareLinks(activityName, formattedSchedule) {
-    const pageUrl = window.location.href;
+    const pageUrl = globalThis.location.href;
     const shareText = `Check out ${activityName} at Mergington High School (${formattedSchedule})`;
     const encodedText = encodeURIComponent(shareText);
     const encodedUrl = encodeURIComponent(pageUrl);
@@ -620,6 +620,7 @@ document.addEventListener("DOMContentLoaded", () => {
         await navigator.clipboard.writeText(shareLinks.copyText);
         showMessage(`Share link copied for ${name}.`, "success");
       } catch (error) {
+        console.error("Failed to copy share link:", error);
         showMessage("Could not copy link. Please copy it manually.", "error");
       }
     });
