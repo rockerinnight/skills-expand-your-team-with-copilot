@@ -1,3 +1,21 @@
+function buildShareLinks(activityName, formattedSchedule) {
+  const pageUrl = globalThis.location.href;
+  const shareText = `Check out ${activityName} at Mergington High School (${formattedSchedule})`;
+  const encodedText = encodeURIComponent(shareText);
+  const encodedUrl = encodeURIComponent(pageUrl);
+  const encodedEmailSubject = encodeURIComponent(
+    `${activityName} at Mergington High School`
+  );
+  const encodedEmailBody = encodeURIComponent(`${shareText}\n\n${pageUrl}`);
+
+  return {
+    twitter: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    email: `mailto:?subject=${encodedEmailSubject}&body=${encodedEmailBody}`,
+    copyText: `${shareText} ${pageUrl}`,
+  };
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // DOM elements
   const activitiesList = document.getElementById("activities-list");
@@ -302,24 +320,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fallback to the string format if schedule_details isn't available
     return details.schedule;
-  }
-
-  function buildShareLinks(activityName, formattedSchedule) {
-    const pageUrl = globalThis.location.href;
-    const shareText = `Check out ${activityName} at Mergington High School (${formattedSchedule})`;
-    const encodedText = encodeURIComponent(shareText);
-    const encodedUrl = encodeURIComponent(pageUrl);
-    const encodedEmailSubject = encodeURIComponent(
-      `${activityName} at Mergington High School`
-    );
-    const encodedEmailBody = encodeURIComponent(`${shareText}\n\n${pageUrl}`);
-
-    return {
-      twitter: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
-      email: `mailto:?subject=${encodedEmailSubject}&body=${encodedEmailBody}`,
-      copyText: `${shareText} ${pageUrl}`,
-    };
   }
 
   // Function to determine activity type (this would ideally come from backend)
