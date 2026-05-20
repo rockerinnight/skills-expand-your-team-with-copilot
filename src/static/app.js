@@ -1,3 +1,11 @@
+function formatDifficultyLevel(difficultyLevel) {
+  if (!difficultyLevel) {
+    return "";
+  }
+
+  return difficultyLevel.charAt(0).toUpperCase() + difficultyLevel.slice(1);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // DOM elements
   const activitiesList = document.getElementById("activities-list");
@@ -364,16 +372,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Default to "academic" if no match
     return "academic";
-  }
-
-  function formatDifficultyLevel(difficultyLevel) {
-    if (!difficultyLevel) {
-      return "";
-    }
-
-    return (
-      difficultyLevel.charAt(0).toUpperCase() + difficultyLevel.slice(1)
-    );
   }
 
   // Function to fetch activities from API with optional day and time filters
