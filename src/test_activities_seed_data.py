@@ -18,6 +18,14 @@ class TestActivitiesSeedData(unittest.TestCase):
         self.assertEqual(manga_maniacs["schedule_details"]["end_time"], "18:00")
         self.assertEqual(manga_maniacs["max_participants"], 25)
 
+    def test_activities_can_include_optional_difficulty_level(self):
+        self.assertEqual(initial_activities["Programming Class"]["difficulty"], "beginner")
+        self.assertEqual(initial_activities["Chess Club"]["difficulty"], "intermediate")
+        self.assertEqual(initial_activities["Science Olympiad"]["difficulty"], "advanced")
+
+    def test_activity_without_difficulty_is_treated_as_all_levels(self):
+        self.assertNotIn("difficulty", initial_activities["Manga Maniacs"])
+
 
 if __name__ == "__main__":
     unittest.main()
