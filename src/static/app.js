@@ -1,3 +1,21 @@
+function buildShareLinks(activityName, formattedSchedule) {
+  const pageUrl = globalThis.location.href;
+  const shareText = `Check out ${activityName} at Mergington High School (${formattedSchedule})`;
+  const encodedText = encodeURIComponent(shareText);
+  const encodedUrl = encodeURIComponent(pageUrl);
+  const encodedEmailSubject = encodeURIComponent(
+    `${activityName} at Mergington High School`
+  );
+  const encodedEmailBody = encodeURIComponent(`${shareText}\n\n${pageUrl}`);
+
+  return {
+    twitter: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
+    facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
+    email: `mailto:?subject=${encodedEmailSubject}&body=${encodedEmailBody}`,
+    copyText: `${shareText} ${pageUrl}`,
+  };
+}
+
 function formatDifficultyLevel(difficultyLevel) {
   if (!difficultyLevel) {
     return "";
@@ -543,6 +561,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Format the schedule using the new helper function
     const formattedSchedule = formatSchedule(details);
+    const shareLinks = buildShareLinks(name, formattedSchedule);
 
     // Create activity tag
     const tagHtml = `
@@ -617,9 +636,16 @@ document.addEventListener("DOMContentLoaded", () => {
             : `
           <div class="auth-notice">
             Teachers can register students.
-          </div>
-        `
+            </div>
+         `
         }
+      </div>
+      <div class="share-actions">
+        <span class="share-label">Share:</span>
+        <a class="share-button" href="${shareLinks.twitter}" target="_blank" rel="noopener noreferrer">X</a>
+        <a class="share-button" href="${shareLinks.facebook}" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a class="share-button" href="${shareLinks.email}">Email</a>
+        <button type="button" class="share-button copy-share-button">Copy Link</button>
       </div>
     `;
 
@@ -638,6 +664,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     }
+
+    const copyShareButton = activityCard.querySelector(".copy-share-button");
+    copyShareButton.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(shareLinks.copyText);
+        showMessage(`Share link copied for ${name}.`, "success");
+      } catch (error) {
+        console.error("Failed to copy share link:", error);
+        showMessage("Could not copy link. Please copy it manually.", "error");
+      }
+    });
 
     activitiesList.appendChild(activityCard);
   }
